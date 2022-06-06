@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Ciudad;
+use App\Models\Sucursal;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -17,10 +19,20 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    protected $table = 'users';
+    protected $primaryKey= 'id';
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'rol',
+        'apellidos',
+        'numero_identificacion',
+        'direccion',
+        'ciudad_id',
+        'sucursal_id'
     ];
 
     /**
@@ -41,4 +53,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function ciudad()
+    {
+        return $this->belongsTo(Ciudad::class, 'ciudad_id');
+    }
+
+    public function sucursal()
+    {
+        return $this->belongsTo(Sucursal::class, 'sucursal_id');
+    }
 }
